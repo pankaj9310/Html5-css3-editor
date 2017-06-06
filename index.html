@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title>Html and CSS Editor</title>
+<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/codemirror.css">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="static/js/codemirror.js"></script>
+   
+
+<style>
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+body {
+  color:#000000;
+  margin:1px;
+  font-size:100%;
+}
+
+
+#framesize span {
+  font-family:Consolas, monospace;
+}
+#container {
+  background-color:#f1f1f1;
+  width:100%;
+  overflow:auto;
+  position:absolute;
+  top:100px;
+  bottom:0;
+  height:auto;
+}
+#textareacontainer, #iframecontainer {
+  float:left;
+  height:100%;
+  width:50%;
+}
+#textarea, #iframe {
+  height:100%;
+  width:100%;
+  padding-bottom:10px;
+  padding-top:1px;
+}
+#textarea {
+  padding-left:10px;
+  padding-right:5px;  
+}
+#iframe {
+  padding-left:5px;
+  padding-right:10px;  
+}
+#textareawrapper {
+  width:100%;
+  height:100%;
+  background-color: #ffffff;
+  position:relative;
+  box-shadow:0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+#iframewrapper {
+  width:100%;
+  height:100%;
+  -webkit-overflow-scrolling: touch;
+  background-color: #ffffff;
+  box-shadow:0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+#textareaCode {
+  background-color: #ffffff;
+  font-family: consolas,"courier new",monospace;
+  font-size:15px;
+  height:100%;
+  width:100%;
+  padding:8px;
+  resize: none;
+  border:none;
+  line-height:normal;    
+}
+.CodeMirror.cm-s-default {
+  line-height:normal;
+  padding: 4px;
+  height:100%;
+  width:100%;
+}
+#iframeResult, #iframeSource {
+  background-color: #ffffff;
+  height:100%;
+  width:100%;  
+}
+
+#textareacontainer.horizontal,#iframecontainer.horizontal{
+  height:50%;
+  float:none;
+  width:100%;
+}
+
+@media only screen and (max-device-width: 768px) {
+  #iframewrapper {overflow: auto;}
+  #container     {min-width:320px;}
+  .stack         {display:none;}
+  #tryhome       {display:block;}
+}
+
+
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+#iframewrapper {
+  
+}
+
+</style>
+<!--[if lt IE 8]>
+<style>
+#textareacontainer, #iframecontainer {width:48%;}
+#container {height:500px;}
+#textarea, #iframe {width:90%;height:450px;}
+#textareaCode, #iframeResult {height:450px;}
+</style>
+<![endif]-->
+</head>
+<body>
+<h2 align="center">HTML5 and CSS3 editor </h2>
+  <button class="btn btn-lg btn-success" onclick="submitTryit(1)"  style="border-top:1px solid #f1f1f1;overflow:auto; margin-left:20px; margin-top:-20px">Run & Test </button>
+
+
+<div id="container">
+
+  <div id="textareacontainer">
+    <div id="textarea">
+      <div id="textareawrapper">
+        <textarea autocomplete="off" id="textareaCode" wrap="logical" spellcheck="false"><!DOCTYPE html>
+<html>
+<body>
+
+<h1>My First Heading</h1>
+
+<p>My first paragraph.</p>
+
+</body>
+</html>
+
+</textarea>
+       
+       </div>
+    </div>
+  </div>
+  <div id="iframecontainer">
+    <div id="iframe">
+      <div id="iframewrapper"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+submitTryit()
+
+function submitTryit(n) {
+  if (window.editor) {
+    window.editor.save();
+  }
+  var text = document.getElementById("textareaCode").value;
+  var ifr = document.createElement("iframe");
+  ifr.setAttribute("frameborder", "0");
+  ifr.setAttribute("id", "iframeResult");
+  ifr.setAttribute("name", "iframeResult");  
+  document.getElementById("iframewrapper").innerHTML = "";
+  document.getElementById("iframewrapper").appendChild(ifr);
+
+    var ifrw = (ifr.contentWindow) ? ifr.contentWindow : (ifr.contentDocument.document) ? ifr.contentDocument.document : ifr.contentDocument;
+    ifrw.document.open();
+    ifrw.document.write(text);  
+    ifrw.document.close();  
+    if (ifrw.document.body && !ifrw.document.body.isContentEditable) {
+      ifrw.document.body.contentEditable = true;
+      ifrw.document.body.contentEditable = false;
+    }
+  
+}
+
+
+var stack;
+
+
+function colorcoding() {  
+  window.editor = CodeMirror.fromTextArea(document.getElementById("textareaCode"), {
+    mode: "text/html",
+    htmlMode: true,
+    lineWrapping: true,
+    smartIndent: false,
+    addModeClass: true
+  });
+//  window.editor.on("change", function () {window.editor.save();});
+}
+colorcoding();
+
+</script>
+
+</body>
+</html>
